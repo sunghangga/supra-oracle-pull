@@ -2,7 +2,7 @@ const { ethers } = require("hardhat");
 const PullServiceClient = require("../oracle-pull-example/gRPC/javascript/evm_client/pullServiceClient");
 require("dotenv").config();
 
-const address = "testnet-dora.supraoracles.com";
+const address = "testnet-dora-2.supra.com";
 const pairIndexes = [0, 21, 61, 49];
 const sepoliaPullContractAddress = "0x6Cd59830AAD978446e6cc7f6cc173aF7656Fb917"; // Update for V1 or V2
 const privateKey = process.env.PRIVATE_KEY;
@@ -14,16 +14,25 @@ async function main() {
         chain_type: "evm",
     };
 
-    console.log("Getting proof....");
+    function getProofAsync(client, request) {
+        return new Promise((resolve, reject) => {
+            client.getProof(request, (err, response) => {
+                if (err) return reject(err);
+                resolve(response);
+            });
+        });
+    }
 
-    const proof = client.getProof(request, (err, response) => {
-        if (err) {
-            console.error("Error getting proof:", err.details);
-            return;
-        }
-        console.log("Calling contract to verify the proofs.. ");
-        callContract(response.evm);
-    });
+    try {
+        console.log("Getting proof....");
+
+        const response = await getProofAsync(client, request);
+
+        console.log("Calling contract to verify the proofs...");
+        await callContract(response.evm);
+    } catch (err) {
+        console.error("Error getting proof:", err.message || err);
+    }
 }
 
 async function callContract(response) {
