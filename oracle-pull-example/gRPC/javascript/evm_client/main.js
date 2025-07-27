@@ -2,7 +2,7 @@ const PullServiceClient = require("./pullServiceClient");
 const {Web3} = require('web3');
 
 async function main() {
-    const address = 'testnet-dora-2.supra.com'; // Set the gRPC server address
+    const address = '<GRPC SERVER ADDRESS>'; // Set the gRPC server address
     const pairIndexes = [0, 21, 61, 49]; // Set the pair indexes as an array
     const chainType = 'evm'; // Set the chain type (evm, sui, aptos)
 
@@ -25,7 +25,7 @@ async function main() {
 
 async function callContract(response) {
 
-    const web3 = new Web3(new Web3.providers.HttpProvider('https://sepolia.infura.io/v3/1234567890')); // Rpc url for desired chain
+    const web3 = new Web3(new Web3.providers.HttpProvider('<RPC URL>')); // Rpc url for desired chain
 
     const contractAbi = require("../../resources/abi.json"); // Path of your smart contract ABI
 
